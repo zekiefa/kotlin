@@ -2,14 +2,14 @@ package br.com.cvc.evaluation.endpoint
 
 import br.com.cvc.evaluation.domain.Hotel
 import br.com.cvc.evaluation.service.BookingService
+import jakarta.inject.Inject
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
+import jakarta.ws.rs.PathParam
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
-import javax.inject.Inject
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
 
-@Path("/booking")
+@Path("/api/v1/booking")
 class BookingEndpoint @Inject constructor(val service: BookingService) {
     private val format = "yyyy-MM-dd"
 

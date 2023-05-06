@@ -1,8 +1,8 @@
 package br.com.cvc.evaluation.service
 
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
 import java.math.BigDecimal
-import javax.enterprise.context.ApplicationScoped
-import javax.inject.Inject
 
 @ApplicationScoped
 class FeeService @Inject constructor(@Inject val feeProvider: FeeProvider) {

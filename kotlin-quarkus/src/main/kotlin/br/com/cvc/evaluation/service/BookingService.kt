@@ -9,19 +9,19 @@ import br.com.cvc.evaluation.service.BookingConstants.ONE_DAY
 import br.com.cvc.evaluation.service.BookingConstants.ONE_PAX
 import br.com.cvc.evaluation.service.mapper.HotelMapper
 import br.com.cvc.evaluation.service.mapper.RoomMapper
+import jakarta.enterprise.context.ApplicationScoped
+import jakarta.inject.Inject
 import org.eclipse.microprofile.rest.client.inject.RestClient
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-import javax.enterprise.context.ApplicationScoped
-import javax.inject.Inject
 
 @ApplicationScoped
 class BookingService @Inject constructor(
     @RestClient val brokerService: BrokerService,
-    val feeService: FeeService,
-    val hotelMapper: HotelMapper,
-    val roomMapper: RoomMapper) {
+    private val feeService: FeeService,
+    private val hotelMapper: HotelMapper,
+    private val roomMapper: RoomMapper) {
 
     private fun calculateTotaPrice(paxPrice: BigDecimal, days: Long): BigDecimal {
         val fee = this.feeService.calculateFee(paxPrice, days)
@@ -35,25 +35,29 @@ class BookingService @Inject constructor(
 
     private fun calculateTotalPrice(brokerHotelRoom: BrokerHotelRoom, days: Long, adults: Int, child: Int): Room {
         val room = this.roomMapper.toDomain(brokerHotelRoom)
+        var pricePerDayAdult = BigDecimal.ZERO
+        var pricePerDayChild = BigDecimal.ZERO
         var totalPrice = BigDecimal.ZERO
 
         if (adults > 0) {
-            room.priceDetail.pricePerDayAdult = this.calculateTotaPrice(brokerHotelRoom.price.adult, ONE_DAY)
+            pricePerDayAdult = this.calculateTotaPrice(brokerHotelRoom.price.adult, ONE_DAY)
             totalPrice = totalPrice.add(room.priceDetail.pricePerDayAdult.multiply(BigDecimal.valueOf(days)))
         }
 
         if (child > 0) {
-            room.priceDetail.pricePerDayChild = this.calculateTotaPrice(brokerHotelRoom.price.child, ONE_DAY)
+            pricePerDayChild = this.calculateTotaPrice(brokerHotelRoom.price.child, ONE_DAY)
             totalPrice = totalPrice.add(room.priceDetail.pricePerDayChild.multiply(BigDecimal.valueOf(days)))
         }
 
+        room.priceDetail.pricePerDayAdult = pricePerDayAdult
+        room.priceDetail.pricePerDayChild = pricePerDayChild
         room.totalPrice = totalPrice
 
         return room
     }
 
-    private fun calculateBooking(brokerHotel: BrokerHotel, days: Long, adults: Int, child: Int): Hotel {
-        val hotel = this.hotelMapper.toDomain(brokerHotel)
+   private fun calculateBooking(brokerHotel: BrokerHotel, days: Long, adults: Int, child: Int): Hotel {
+       val hotel = this.hotelMapper.toDomain(brokerHotel)
         hotel.rooms = brokerHotel.rooms.map { this.calculateTotalPrice(it, days, adults, child) }
 
         return hotel
