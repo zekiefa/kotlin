@@ -1,17 +1,20 @@
 package fixture
 
-import com.github.jairovsky.fixturefactory.kotlin.FixtureDefinitions
+import br.com.cvc.evaluation.broker.dto.BrokerHotel
+import br.com.cvc.evaluation.broker.dto.BrokerHotelRoom
+import br.com.cvc.evaluation.broker.dto.Price
+import br.com.cvc.evaluation.domain.Hotel
+import net.datenstrudel.kotlin_fixture_magic.FixtureFactory
 
-object Fixtures : FixtureDefinitions({
-    "conta_valida_fulano" {
 
+class Fixtures {
+    var fixture = FixtureFactory.build { randomStringLength = 20 }
+
+    fun createValidHotel(): Hotel {
+        return fixture.createInstance()
     }
 
-    "conta_valida_ciclano" {
-
+    fun createValidBroketHotel(): BrokerHotel {
+        return fixture.createInstance()
     }
-
-    "conta_valida_sem_saldo" {
-
-    }
-})
+}
