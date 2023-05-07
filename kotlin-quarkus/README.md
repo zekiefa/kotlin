@@ -20,6 +20,12 @@
 ### About the application
 It's a RESTFull API for booking and searching a hotel
 
+### Access the application
+```shell
+curl --request GET \
+--url http://localhost:8080/hotel/6
+```
+
 
 ### References
 - [Using Kotlin](https://quarkus.io/guides/kotlin)
