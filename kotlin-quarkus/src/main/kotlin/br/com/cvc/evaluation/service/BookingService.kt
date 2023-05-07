@@ -5,6 +5,8 @@ import br.com.cvc.evaluation.broker.dto.BrokerHotel
 import br.com.cvc.evaluation.broker.dto.BrokerHotelRoom
 import br.com.cvc.evaluation.domain.Hotel
 import br.com.cvc.evaluation.domain.Room
+import br.com.cvc.evaluation.exceptions.BookingPeriodInvalidException
+import br.com.cvc.evaluation.exceptions.HotelNotFoundException
 import br.com.cvc.evaluation.service.BookingConstants.ONE_DAY
 import br.com.cvc.evaluation.service.BookingConstants.ONE_PAX
 import br.com.cvc.evaluation.service.mapper.HotelMapper
@@ -30,6 +32,10 @@ class BookingService @Inject constructor(
     }
 
     private fun calculatePeriod(checkin: LocalDate, checkout: LocalDate):Long {
+        if (checkout.isBefore(checkin)) {
+            throw BookingPeriodInvalidException("Checkin must be before checkout")
+        }
+
         return checkin.until(checkout, ChronoUnit.DAYS)
     }
 
@@ -41,16 +47,16 @@ class BookingService @Inject constructor(
 
         if (adults > 0) {
             pricePerDayAdult = this.calculateTotaPrice(brokerHotelRoom.price.adult, ONE_DAY)
-            totalPrice = totalPrice.add(room.priceDetail.pricePerDayAdult.multiply(BigDecimal.valueOf(days)))
+            totalPrice = totalPrice.add(pricePerDayAdult.multiply(BigDecimal.valueOf(days)))
         }
 
         if (child > 0) {
             pricePerDayChild = this.calculateTotaPrice(brokerHotelRoom.price.child, ONE_DAY)
-            totalPrice = totalPrice.add(room.priceDetail.pricePerDayChild.multiply(BigDecimal.valueOf(days)))
+            totalPrice = totalPrice.add(pricePerDayChild.multiply(BigDecimal.valueOf(days)))
         }
 
-        room.priceDetail.pricePerDayAdult = pricePerDayAdult
-        room.priceDetail.pricePerDayChild = pricePerDayChild
+        room.priceDetail?.pricePerDayAdult = pricePerDayAdult
+        room.priceDetail?.pricePerDayChild = pricePerDayChild
         room.totalPrice = totalPrice
 
         return room
@@ -63,13 +69,12 @@ class BookingService @Inject constructor(
         return hotel
     }
 
-    fun getHotelDetails(codeHotel:Int): Hotel? {
-        var hotel: Hotel?
-        val details = this.brokerService.getHotelDetails(codeHotel)
+    fun getHotelDetails(codeHotel:Int): Hotel {
+        val details = this.brokerService.getHotelDetails(codeHotel) ?: throw HotelNotFoundException("Hotel $codeHotel not found")
 
-        details.let { hotel = this.calculateBooking(it, ONE_DAY, ONE_PAX, ONE_PAX) }
-
-        return hotel
+        return details.let {
+            this.calculateBooking(it, ONE_DAY, ONE_PAX, ONE_PAX)
+        }
     }
 
     fun findHotels(cityCode: Int, checkin: LocalDate, checkout: LocalDate, adults: Int, child: Int): List<Hotel> {

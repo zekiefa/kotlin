@@ -17,5 +17,5 @@ interface BrokerService {
 
     @GET
     @Path("/{codeHotel}")
-    fun getHotelDetails(@PathParam("codeHotel") codeHotel: Int): BrokerHotel
+    fun getHotelDetails(@PathParam("codeHotel") codeHotel: Int): BrokerHotel?
 }

@@ -5,5 +5,5 @@ import java.math.BigDecimal
 
 data class Room(@field: JsonProperty("roomID") val roomID: Int,
                 @field: JsonProperty("categoryName") val categoryName: String,
-                @field: JsonProperty("totalPrice") var totalPrice: BigDecimal,
-                @field: JsonProperty("priceDetail") val priceDetail: PriceDetail)
+                @field: JsonProperty("totalPrice") var totalPrice: BigDecimal?,
+                @field: JsonProperty("priceDetail") val priceDetail: PriceDetail?)
