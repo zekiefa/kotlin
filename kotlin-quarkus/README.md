@@ -5,6 +5,7 @@
 - Quarkus 3.0.1
 - Kotlin 1.8.10
 - [Mapstruct](https://mapstruct.org) for conversions between domains
+- [Kotlin-Logging](https://github.com/oshai/kotlin-logging)
 - [JUnit 5](https://junit.org/junit5/docs/current/user-guide) for unit tests
 - [Mockito](https://javadoc.io/doc/org.mockito/mockito-core/latest/org/mockito/Mockito.html)
 - [Hamcrest](http://hamcrest.org/JavaHamcrest) for alternative asserts
@@ -29,3 +30,4 @@ curl --request GET \
 
 ### References
 - [Using Kotlin](https://quarkus.io/guides/kotlin)
+- [Guide to Kotlin-Logging](https://www.baeldung.com/kotlin/kotlin-logging-library)
