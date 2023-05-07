@@ -35,6 +35,9 @@ dependencies {
     kapt("org.mapstruct:mapstruct-processor:1.5.5.Final")
     testAnnotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 
+    implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
+    implementation("ch.qos.logback:logback-classic:1.4.7")
+
     testImplementation(kotlin("test-junit5"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
