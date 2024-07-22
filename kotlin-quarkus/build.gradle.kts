@@ -1,10 +1,8 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    kotlin("jvm") version "1.8.10"
-    kotlin("kapt") version "1.8.10"
-    id("org.jetbrains.kotlin.plugin.allopen") version "1.8.10"
-    id("io.quarkus") version "3.0.1.Final"
+    kotlin("jvm") version "2.0.0"
+    kotlin("kapt") version "2.0.0"
+    id("org.jetbrains.kotlin.plugin.allopen") version "2.0.0"
+    id("io.quarkus") version "3.13.0.CR1"
 }
 
 val quarkusPlatformGroupId: String by project
@@ -20,12 +18,12 @@ repositories {
 }
 
 dependencies {
-    implementation("org.junit.jupiter:junit-jupiter:5.9.3")
+    implementation("org.junit.jupiter:junit-jupiter:5.10.3")
 
-    implementation(enforcedPlatform("io.quarkus:quarkus-bom:3.0.2.Final"))
+    implementation(enforcedPlatform("io.quarkus:quarkus-bom:3.13.0.CR1"))
     implementation("io.quarkus:quarkus-kotlin")
-    implementation("io.quarkus:quarkus-resteasy")
-    implementation("io.quarkus:quarkus-resteasy-jackson")
+    implementation("io.quarkus:quarkus-rest")
+    implementation("io.quarkus:quarkus-rest-jackson")
     implementation("io.quarkus:quarkus-config-yaml")
     implementation("io.quarkus:quarkus-rest-client")
     implementation("io.quarkus:quarkus-rest-client-jackson")
@@ -37,15 +35,15 @@ dependencies {
     testAnnotationProcessor("org.mapstruct:mapstruct-processor:1.5.5.Final")
 
     implementation("io.github.microutils:kotlin-logging-jvm:3.0.5")
-    implementation("ch.qos.logback:logback-classic:1.4.7")
-    implementation("com.tietoevry.quarkus:quarkus-resteasy-problem:3.0.0")
+    implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation("com.tietoevry.quarkus:quarkus-resteasy-problem:3.9.0")
 
     testImplementation(kotlin("test-junit5"))
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.3")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.10.3")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.10.3")
     testImplementation("org.hamcrest:hamcrest:2.2")
     testImplementation("io.rest-assured:rest-assured")
-    testImplementation("io.quarkiverse.mockk:quarkus-junit5-mockk:2.0.0")
+    testImplementation("io.quarkiverse.mockk:quarkus-junit5-mockk:3.0.0")
     testImplementation("net.datenstrudel:kotlin-fixture-magic:0.1.2")
 
     testImplementation("io.quarkus:quarkus-junit5")
@@ -53,8 +51,8 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_11
-    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
 }
 
 allOpen {
@@ -78,9 +76,4 @@ tasks.compileKotlin {
 
 tasks.test {
     useJUnitPlatform()
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions.jvmTarget = JavaVersion.VERSION_11.toString()
-    kotlinOptions.javaParameters = true
 }

@@ -1,9 +1,9 @@
 # Simple Quarkus Project with Kotlin
 
 ### Architecture
-- Java 11
-- Quarkus 3.0.1
-- Kotlin 1.8.10
+- Java ~~11~~ 21
+- Quarkus ~~3.0.1~~ 3.13.0.CR1
+- Kotlin ~~1.8.10~~ 2.0.0
 - [Mapstruct](https://mapstruct.org) for conversions between domains
 - [Kotlin-Logging](https://github.com/oshai/kotlin-logging)
 - [JUnit 5](https://junit.org/junit5/docs/current/user-guide) for unit tests
